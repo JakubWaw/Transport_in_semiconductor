@@ -1,5 +1,5 @@
 #include "bandstruct.h"
-#include "material.h"
+#include "class.h"
 
 double Ek(double k, material Mat)
 {

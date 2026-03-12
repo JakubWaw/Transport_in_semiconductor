@@ -14,3 +14,24 @@ struct material
 	}
 };
 
+struct vec2d
+{
+	double x;
+	double y;
+
+	vec2d(double x, double y)
+		: x(x), y(y) {
+	}
+};
+
+struct vec3d
+{
+	double x;
+	double y;
+	double z;
+
+	vec3d(double x, double y)
+		: x(x), y(y), z(z) {
+	}
+};
+

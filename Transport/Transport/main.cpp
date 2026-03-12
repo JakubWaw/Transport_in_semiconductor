@@ -19,7 +19,7 @@ struct Si
 };
 
 // project headers
-#include "material.h"
+#include "class.h"
 #include "scattering.h"
 #include "dossier.h"
 #include "evolution.h"
