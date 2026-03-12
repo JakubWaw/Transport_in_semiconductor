@@ -8,11 +8,11 @@
 #include "evolution.h"
 #include "distribution.h"
 
-
+double m0 = 9.10938356e-31; // kg
 struct Si
 {
-	double meff_l = 1;
-	double meff_t = 1;
+	double meff_l = 0.98*m0;
+	double meff_t = 0.19*m0;
 	double tau_op = 1;
 	double tau_ac = 1;
 	double tau_ion = 1;
