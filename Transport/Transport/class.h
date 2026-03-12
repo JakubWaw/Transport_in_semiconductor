@@ -30,7 +30,7 @@ struct vec3d
 	double y;
 	double z;
 
-	vec3d(double x, double y)
+	vec3d(double x, double y, double z)
 		: x(x), y(y), z(z) {
 	}
 };
