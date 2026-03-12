@@ -1,7 +1,4 @@
-#ifndef DISTRIBUTION_H
-#define DISTRIBUTION_H
+#pragma once
 
 
 double Poisson(double tau);
-
-#endif // DISTRIBUTION_H

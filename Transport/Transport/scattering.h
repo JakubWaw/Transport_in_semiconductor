@@ -1,7 +1,3 @@
-#ifndef SCATTERING_H
-#define SCATTERING_H
+#pragma once
 
 
-
-
-#endif // SCATTERING_H

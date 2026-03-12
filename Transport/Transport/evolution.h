@@ -1,7 +1,3 @@
-#ifndef EVOLUTION_H
-#define EVOLUTION_H
+#pragma once
 
 
-
-
-#endif // EVOLUTION_H
