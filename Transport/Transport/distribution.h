@@ -2,6 +2,6 @@
 #define DISTRIBUTION_H
 
 
-double Poisson(double gamma);
+double Poisson(double tau);
 
 #endif // DISTRIBUTION_H
