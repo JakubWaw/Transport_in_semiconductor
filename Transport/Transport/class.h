@@ -1,5 +1,9 @@
 #pragma once
 
+#define PI 3.14159265359
+#define kB 1.380649e-23
+#define m0 9.10938356e-31
+
 struct material
 {
 	double meff_l;

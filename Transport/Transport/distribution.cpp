@@ -14,5 +14,16 @@ double Poisson(double tau)
 
 vec2d UniAngles()
 {
-	return vec2d(0, 0);
+	double U = double((rand() % 1000)) / 1000.0;
+	double V = double((rand() % 1000)) / 1000.0;
+
+	double psi = acos(1 - 2 * U);
+	double phi = 2 * PI * V;
+	return vec2d(psi, phi);
+}
+
+double Boltzmann(double T)
+{
+	double U = double((rand() % 1000)) / 1000.0;
+	double E = -kB * T * log(U);
 }
