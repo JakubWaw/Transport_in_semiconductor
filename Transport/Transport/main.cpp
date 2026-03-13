@@ -5,18 +5,7 @@
 //Uzywajmy w kodzie jednostek SI, bez jakis eV czy innych udziwnien bo potem sie wszystko pierdoli
 
 double m0 = 9.10938356e-31; // kg
-struct Si
-{
-	double meff_l = 0.98*m0;
-	double meff_t = 0.19*m0;
-	double tau_op = 1;
-	double tau_ac = 1;
-	double tau_ion = 1;
-	double N_d = 1;
 
-	Si(double meff_l, double meff_t, double tau_op, double tau_ac, double tau_ion, double N_d)
-		: meff_l(meff_l), meff_t(meff_t), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d) {}
-};
 
 // project headers
 #include "class.h"
@@ -29,6 +18,13 @@ struct Si
 
 int main()
 {
+
+	material Si = material(0.98*m0, 0.19*m0, 10e-12, 10e-20, 10e-14, 10e-15);
+	double Ek_Si = Ek(10e10, Si);
+
+	std::cout<< Ek_Si;
+
 	return 0;
+
 }
 
