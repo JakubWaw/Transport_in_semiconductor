@@ -39,5 +39,9 @@ struct vec3d
 	vec3d(double x, double y, double z)
 		: x(x), y(y), z(z) {
 	}
+
+	vec3d()
+		: x(0), y(0), z(0) {
+	}
 };
 

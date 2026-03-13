@@ -22,9 +22,23 @@ vec2d UniAngles()
 	return vec2d(psi, phi);
 }
 
-double Boltzmann(double T)
+double BoltzmannE(double T)
 {
 	double U = double((rand() % 1000)) / 1000.0;
 	double E = -kB * T * log(U);
 	return E;
+}
+
+vec3d RandKFromE(double E, material Mat)
+{
+	vec2d Angles = UniAngles();
+	double psi = Angles.x;
+	double phi = Angles.y;
+
+	double q1 = sqrt(2 * E / (hbar * hbar));
+
+	vec3d q2 = vec3d(q1 * sin(psi) * cos(phi), q1 * sin(psi) * sin(phi), q1 * cos(psi));
+	vec3d k = vec3d(q2.x * Mat.meff_l, q2.y * Mat.meff_l, q2.z * Mat.meff_t);
+
+	return k;
 }
