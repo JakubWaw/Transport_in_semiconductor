@@ -18,8 +18,7 @@ vec3d CalcMeanDrift(double Temp, double Efield, material Mat)
 		double Time = 0;
 		vec3d r = vec3d(0, 0, 0);
 
-		double En0 = BoltzmannE(Temp);
-		vec3d k = RandKFromE(En0, Mat);
+		vec3d k = Boltzmannk(Temp, Mat);
 
 		std::vector<double> times; //Czasy do kolejnych rozproszen
 		times.push_back(Poisson(1e-6)); //srednio us

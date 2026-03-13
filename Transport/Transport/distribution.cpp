@@ -24,6 +24,7 @@ vec2d UniAngles()
 
 double BoltzmannE(double T)
 {
+	//Funkcja ta nie uwzglednia zmiennej DOS w funkcji E
 	double U = double((rand() % 1000)) / 1000.0;
 	double E = -kB * T * log(U);
 	return E;
@@ -39,6 +40,20 @@ vec3d RandKFromE(double E, material Mat)
 
 	vec3d q2 = vec3d(q1 * sin(psi) * cos(phi), q1 * sin(psi) * sin(phi), q1 * cos(psi));
 	vec3d k = vec3d(q2.x * Mat.meff_l, q2.y * Mat.meff_l, q2.z * Mat.meff_t);
+
+	return k;
+}
+
+vec3d Boltzmannk(double T, material Mat)
+{
+	//Funkcja ta losuje od razu k, wiec uwzglednia DOS
+	double U = double((rand() % 1000)) / 1000.0;
+	double V = double((rand() % 1000)) / 1000.0;
+	double Y = double((rand() % 1000)) / 1000.0;
+
+	vec3d q = vec3d(U * kB * T / (hbar * hbar), U * kB * T / (hbar * hbar), U * kB * T / (hbar * hbar));
+
+	vec3d k = vec3d(q.x*sqrt(Mat.meff_l), q.y * sqrt(Mat.meff_l), q.z * sqrt(Mat.meff_t));
 
 	return k;
 }
