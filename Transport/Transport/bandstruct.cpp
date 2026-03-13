@@ -13,7 +13,12 @@ double gradEk_anal(vec3d k, material Mat)
 	return gradEk;
 }
 
-double gradEk_Ek_num(vec3d k, material Mat, double delta_k)
+double gradEk_Ek_num(vec3d k, material Mat)
 {
-	double gradEk = 
+	double gradEk = ((hbar*hbar*((k.x+delta_k)*(k.x+delta_k)/(2*Mat.meff_l)+(k.y+delta_k)*(k.y+delta_k)/(2*Mat.meff_l)+(k.z+delta_k)*(k.z+delta_k)
+	/(2*Mat.meff_t)))-(hbar*hbar*((k.x-delta_k)*(k.x-delta_k)/(2*Mat.meff_l)+(k.y-delta_k)*(k.y-delta_k)/(2*Mat.meff_l)+(k.z-delta_k)*(k.z-delta_k)
+	/(2*Mat.meff_t))))/(2*delta_k);
+
+	return gradEk;
 }
+
