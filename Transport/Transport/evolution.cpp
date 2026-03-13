@@ -16,18 +16,24 @@ vec3d CalcMeanDrift(double Temp, double Efield, material Mat)
 	{
 		//Inicjalizaje wektorow
 		double Time = 0;
-		vec3d r0 = vec3d(0, 0, 0);
+		vec3d r = vec3d(0, 0, 0);
 
 		double En0 = BoltzmannE(Temp);
-		vec3d k0 = RandKFromE(En0, Mat);
+		vec3d k = RandKFromE(En0, Mat);
 
 		std::vector<double> times; //Czasy do kolejnych rozproszen
 		times.push_back(Poisson(1e-6)); //srednio us
 
-		while (1)
+		while (Time < MaxTime)
 		{
-			//Sortuj 
+			//Znajdz najmniejszy czas
+
+			//Zrob ewolucje do tego czasu, rozprosz oraz zaktualizuj time
+			//zaktualizuj czasy innych rozproszen (odejmij od nich tyle ile minelo)
+			//wylosuj czas rozproszenia wykonanego
 		}
+
+		Drifts[i] = r;
 	}
 
 	//Dodanie do siebie wszystkich dryfow
