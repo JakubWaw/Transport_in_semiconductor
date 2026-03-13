@@ -26,4 +26,5 @@ double Boltzmann(double T)
 {
 	double U = double((rand() % 1000)) / 1000.0;
 	double E = -kB * T * log(U);
+	return E;
 }

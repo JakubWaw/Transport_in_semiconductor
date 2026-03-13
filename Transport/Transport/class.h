@@ -3,6 +3,7 @@
 #define PI 3.14159265359
 #define kB 1.380649e-23
 #define m0 9.10938356e-31
+#define hbar 1.054571817e-34
 
 struct material
 {
