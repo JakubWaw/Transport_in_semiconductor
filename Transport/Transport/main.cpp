@@ -1,11 +1,6 @@
 // external libraries
 #include <iostream>
-
-
-//Uzywajmy w kodzie jednostek SI, bez jakis eV czy innych udziwnien bo potem sie wszystko pierdoli
-
-double m0 = 9.10938356e-31; // kg
-
+#include <vector>
 
 // project headers
 #include "class.h"
