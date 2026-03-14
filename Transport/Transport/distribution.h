@@ -4,12 +4,12 @@
 
 double Poisson(double tau);
 
-vec2d UniAngles();
+struct vec2d UniAngles();
 
 double BoltzmannE(double T);
 
-vec3d RandKFromE(double E, material Mat);
+struct vec3d RandKFromE(double E, material Mat);
 
-vec3d Boltzmannk(double T, material Mat);
+struct vec3d Boltzmannk(double T, material Mat);
 
 

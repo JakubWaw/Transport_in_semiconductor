@@ -12,7 +12,7 @@ double Poisson(double tau)
 	return -log(U) / tau;
 }
 
-vec2d UniAngles()
+struct vec2d UniAngles()
 {
 	double U = double((rand() % 1000)) / 1000.0;
 	double V = double((rand() % 1000)) / 1000.0;
@@ -30,7 +30,7 @@ double BoltzmannE(double T)
 	return E;
 }
 
-vec3d RandKFromE(double E, material Mat)
+struct vec3d RandKFromE(double E, material Mat)
 {
 	vec2d Angles = UniAngles();
 	double psi = Angles.x;
@@ -44,7 +44,7 @@ vec3d RandKFromE(double E, material Mat)
 	return k;
 }
 
-vec3d Boltzmannk(double T, material Mat)
+struct vec3d Boltzmannk(double T, material Mat)
 {
 	//Funkcja ta losuje od razu k, wiec uwzglednia DOS
 	double U = double((rand() % 1000)) / 1000.0;

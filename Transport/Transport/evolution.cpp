@@ -37,7 +37,7 @@ bool compare_time(const ScatteringEvent& a, const ScatteringEvent& b) // functio
     return a.event_time < b.event_time;
 }
 
-vec3d CalcMeanDrift(double Temp, double Efield, material Mat)
+struct vec3d CalcMeanDrift(double Temp, double Efield, struct material Mat)
 {
 	int N = 1000; //Ilosc czastek w sumulacji
 	std::vector <vec3d> Drifts;
