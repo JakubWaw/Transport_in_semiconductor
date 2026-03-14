@@ -21,13 +21,13 @@ double draw_new_time(ScatteringType type) // function to draw new time to scatte
     switch(type)
     {
         case ScatteringType::Acoustic:
-            return 0; //draw_acoustic_time();
+            return Poisson(1e-6); //draw_acoustic_time();
 
         case ScatteringType::Optical:
-            return 0; //draw_optical_time();
+            return Poisson(1e-6); //draw_optical_time();
 
         case ScatteringType::Impurity:
-            return 0; //draw_impurity_time();
+            return Poisson(1e-6); //draw_impurity_time();
     }
 
     return 0.0;
