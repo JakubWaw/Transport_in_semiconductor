@@ -122,9 +122,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	vec3d SumDrifts(0, 0, 0);
 	for (int i = 0; i < Drifts.size(); i++)
 	{
-		SumDrifts.x += Drifts[i].x;
-		SumDrifts.y += Drifts[i].y;
-		SumDrifts.z += Drifts[i].z;
+		SumDrifts = SumDrifts + Drifts[i];
 	}
 
 	//Obliczenie sredniego dryfu
