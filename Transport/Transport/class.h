@@ -23,7 +23,7 @@ struct material
 	double Q_s;
 
 	material(double mx, double my, double mz, double tau_op, double tau_ac, double tau_ion, double N_d, double T, double omega_0, double Q_s)
-		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d), T(T), omega_0(omega_0), Q_s(Q_s)  {
+		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d), T(T), omega_0(omega_0), Q_s(Q_s)  {}
 
 };
 
