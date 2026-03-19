@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <math.h>
+#include <iostream>
 
 #include "scattering.h"
 #include "class.h"
@@ -15,6 +16,9 @@ struct vec3d ScatterAcousticPhonon(vec3d k, material Mat)
 
 	vec3d kp = RandKFromE(Ep, Mat);
 
+
+	//To do debugu
+	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 	return kp;
 }
 
@@ -37,6 +41,9 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 
 	vec3d kp = RandKFromE(Ep, Mat);
 
+	//To do debugu
+	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
+
 	return kp;
 }
 
@@ -46,42 +53,40 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 
 	double Ep = E;
 
+	//przejscie do przestrzeni przeskalowanej do sfery
+	vec3d ks = vec3d(k.x / sqrt(Mat.mx), k.y / sqrt(Mat.my), k.z / sqrt(Mat.mz));
 
+	double qs_max = 2 * sqrt(ks * ks);
 
-	double U = double((rand() % 1000)) / 1000.0;
-	double V = double((rand() % 1000)) / 1000.0;
+	//wylosowanie q z rozkladu za pomoca metody odrzutu
+	double a, f_q;
+	vec3d q, qs;
+	do
+	{
+		vec2d Angles = UniAngles();
+		double theta = Angles.x;
+		double phi = Angles.y;
+		vec3d q_unitary = vec3d(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
 
-	double cos_psi = 1.0 - (2.0 * (1.0 - U)) / (1.0 + U * ((4.0 * (k * k)) / (Mat.Q_s * Mat.Q_s)));
-	double phi = V * 2.0 * PI;
+		double U = double((rand() % 1000)) / 1000.0;
+		double V = double((rand() % 1000)) / 1000.0;
 
-	double sin_psi = sqrt(1 - cos_psi * cos_psi);
+		double q_len = U * qs_max;
+		qs = q_unitary * q_len;
+		q = vec3d(qs.x * sqrt(Mat.mx), qs.y * sqrt(Mat.my), qs.z * sqrt(Mat.mz));
 
-	double q1 = sqrt(2 * Ep / (hbar * hbar));
+		f_q = 1.0 / (q * q + Mat.Q_s * Mat.Q_s);
+		a = V * 1.0 / (Mat.Q_s * Mat.Q_s);
 
-	double ux = k.x / (k * k);
-	double uy = k.y / (k * k);
-	double uz = k.z / (k * k);
+	} while (a <= f_q);
 
-	double ax = 0;
-	double ay = 0;
-	double az = 1;
+	vec3d ksp = ks + qs;
 
-	double vx = ay * uz - az * uy;
-	double vy = az * ux - ax * uz;
-	double vz = ax * uy - ay * ux;
+	//przeskalowanie na wszelki
+	ksp = ksp * ((ks*ks) / (ksp*ksp));
+	vec3d kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
 
-	double wx = uy * vz - uz * vy;
-	double wy = uz * vx - ux * vz;
-	double wz = ux * vy - uy * vx;
-
-	double uxp = cos_psi * ux + sin_psi * cos(phi) * vx + sin_psi * sin(phi) * wx;
-	double uyp = cos_psi * uy + sin_psi * cos(phi) * vy + sin_psi * sin(phi) * wy;
-	double uzp = cos_psi * uz + sin_psi * cos(phi) * vz + sin_psi * sin(phi) * wz;
-
-
-
-	vec3d q2 = vec3d(q1 * uxp, q1 * uyp, q1 * uzp);
-	vec3d kp = vec3d(q2.x * Mat.mx, q2.y * Mat.my, q2.z * Mat.mz);
-
+	//To do debugu
+	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 	return kp;
 }
