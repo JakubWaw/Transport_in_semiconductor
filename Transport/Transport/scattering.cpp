@@ -51,7 +51,7 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	double U = double((rand() % 1000)) / 1000.0;
 	double V = double((rand() % 1000)) / 1000.0;
 
-	double cos_psi = 1.0 - (2.0 * (1.0 - U)) / (1.0 + U * ((4.0 * k * k) / (Mat.qs * Mat.qs)));
+	double cos_psi = 1.0 - (2.0 * (1.0 - U)) / (1.0 + U * ((4.0 * (k * k)) / (Mat.Q_s * Mat.Q_s)));
 	double phi = V * 2.0 * PI;
 
 	double sin_psi = sqrt(1 - cos_psi * cos_psi);
