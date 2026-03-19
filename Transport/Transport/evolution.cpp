@@ -92,10 +92,6 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			k.y = k_old.y + (-e / hbar) * Efield.y * dt;
 			k.z = k_old.z + (-e / hbar) * Efield.z * dt;
 			// 🔵 UPDATE r (prędkość z k)
-			vec3d v = vec3d(0, 0, 0); //velocity of particle, calculated from quasi-momentum k using effective mass approximation and parabolic dispersion relation
-			v.x = hbar * k.x / Mat.mx;
-			v.y = hbar * k.y / Mat.my;
-			v.z = hbar * k.z / Mat.mz;
 			r.x = r.x + (hbar / Mat.mx) * k_old.x * dt + (-e / (2.0 * Mat.mx)) * Efield.x * dt * dt;
 			r.y = r.y + (hbar / Mat.my) * k_old.y * dt + (-e / (2.0 * Mat.my)) * Efield.y * dt * dt;
 			r.z = r.z + (hbar / Mat.mz) * k_old.z * dt + (-e / (2.0 * Mat.mz)) * Efield.z * dt * dt;
