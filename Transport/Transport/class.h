@@ -8,6 +8,7 @@
 #define delta_k 10e12
 #define e 1.602176634e-19
 
+
 struct material
 {
 	double mx;
@@ -17,9 +18,11 @@ struct material
 	double tau_ac;
 	double tau_ion;
 	double N_d;
+	double T;
+	double omega_0;
 
-	material(double mx, double my, double mz, double tau_op, double tau_ac, double tau_ion, double N_d)
-		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d) {
+	material(double mx, double my, double mz, double tau_op, double tau_ac, double tau_ion, double N_d, double T, double omega_0)
+		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d), T(T), omega_0(omega_0) {
 	}
 };
 
