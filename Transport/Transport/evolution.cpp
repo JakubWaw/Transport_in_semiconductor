@@ -108,7 +108,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			//new time on the clock
 			Time = t_next;
 			// wykonanie rozproszenia
-			k = k + perform_scattering(type,k,Mat); //fuction to write that will update quasi-momentum k based on type of scattering
+			k = perform_scattering(type,k,Mat); //fuction to write that will update quasi-momentum k based on type of scattering
 			// time of next scattering event of the same type
 			double new_time = Time + draw_new_time(type, Mat); //function to write that will draw new time to scattering event based on type of scattering
 			// update time to next scattering event of the same type
