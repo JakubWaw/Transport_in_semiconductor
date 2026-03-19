@@ -39,7 +39,24 @@ struct vec3d RandKFromE(double E, material Mat)
 	double q1 = sqrt(2 * E / (hbar * hbar));
 
 	vec3d q2 = vec3d(q1 * sin(psi) * cos(phi), q1 * sin(psi) * sin(phi), q1 * cos(psi));
-	vec3d k = vec3d(q2.x * Mat.meff_l, q2.y * Mat.meff_l, q2.z * Mat.meff_t);
+	vec3d k = vec3d(q2.x * Mat.mx, q2.y * Mat.my, q2.z * Mat.mz);
+
+	return k;
+}
+
+struct vec3d RandKFromE_Anisotropic(double E, material Mat)
+{
+	double U = double((rand() % 1000)) / 1000.0;
+	double V = double((rand() % 1000)) / 1000.0;
+
+
+	double cos_psi = 0;
+	double phi = 0;
+
+	double q1 = sqrt(2 * E / (hbar * hbar));
+
+	vec3d q2 = vec3d(q1 * sin(psi) * cos(phi), q1 * sin(psi) * sin(phi), q1 * cos(psi));
+	vec3d k = vec3d(q2.x * Mat.mx, q2.y * Mat.my, q2.z * Mat.mz);
 
 	return k;
 }
@@ -53,7 +70,7 @@ struct vec3d Boltzmannk(double T, material Mat)
 
 	vec3d q = vec3d(U * kB * T / (hbar * hbar), U * kB * T / (hbar * hbar), U * kB * T / (hbar * hbar));
 
-	vec3d k = vec3d(q.x*sqrt(Mat.meff_l), q.y * sqrt(Mat.meff_l), q.z * sqrt(Mat.meff_t));
+	vec3d k = vec3d(q.x*sqrt(Mat.mx), q.y * sqrt(Mat.my), q.z * sqrt(Mat.mz));
 
 	return k;
 }
