@@ -83,7 +83,7 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	vec3d ksp = ks + qs;
 
 	//przeskalowanie na wszelki
-	ksp = ksp * ((ks*ks) / (ksp*ksp));
+	ksp = ksp * (sqrt(ks*ks) / sqrt(ksp*ksp));
 	vec3d kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
 
 	//To do debugu
