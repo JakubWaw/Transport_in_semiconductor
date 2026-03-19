@@ -46,5 +46,21 @@ struct vec3d
 	vec3d()
 		: x(0), y(0), z(0) {
 	}
+	//overload addition operator for vec3d
+	vec3d operator+(const vec3d& other) const
+	{
+		return vec3d(x + other.x, y + other.y, z + other.z);
+	}
+	//multiplication by scalar
+	vec3d operator*(double scalar) const
+	{
+		return vec3d(x * scalar, y * scalar, z * scalar);
+	}
+	//scalar product
+	double operator*(const vec3d& other) const
+	{
+		return x * other.x + y * other.y + z * other.z;
+	}
+
 };
 
