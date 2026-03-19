@@ -83,22 +83,18 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			// time to next scattering event
 			double t_next = it->event_time;
 			double dt = t_next - Time;
+			// zapamiętaj stare k!
+			vec3d k_old = k;
+
 			// 🔴 UPDATE k (równanie ruchu)
 			vec3d dk = vec3d(0, 0, 0);
-			dk.x = (-e / hbar) * Efield.x * dt;
-			dk.y = (-e / hbar) * Efield.y * dt;
-			dk.z = (-e / hbar) * Efield.z * dt;
-			k.x = k.x + dk.x;
-			k.y = k.y + dk.y;
-			k.z = k.z + dk.z;
+			k.x = k_old.x + (-e / hbar) * Efield.x * dt;
+			k.y = k_old.y + (-e / hbar) * Efield.y * dt;
+			k.z = k_old.z + (-e / hbar) * Efield.z * dt;
 			// 🔵 UPDATE r (prędkość z k)
-			vec3d v = vec3d(0, 0, 0); //velocity of particle, calculated from quasi-momentum k using effective mass approximation and parabolic dispersion relation
-			v.x = hbar * k.x / Mat.mx;
-			v.y = hbar * k.y / Mat.my;
-			v.z = hbar * k.z / Mat.mz;
-			r.x = r.x + v.x * dt;
-			r.y = r.y + v.y * dt;
-			r.z = r.z + v.z * dt;
+			r.x = r.x + (hbar / Mat.mx) * k_old.x * dt + (-e / (2.0 * Mat.mx)) * Efield.x * dt * dt;
+			r.y = r.y + (hbar / Mat.my) * k_old.y * dt + (-e / (2.0 * Mat.my)) * Efield.y * dt * dt;
+			r.z = r.z + (hbar / Mat.mz) * k_old.z * dt + (-e / (2.0 * Mat.mz)) * Efield.z * dt * dt;
 			//new time on the clock
 			Time = t_next;
 			// wykonanie rozproszenia
