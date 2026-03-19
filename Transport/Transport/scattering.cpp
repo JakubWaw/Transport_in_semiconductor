@@ -28,11 +28,11 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 	double Ep;
 	if (emmit == 1)
 	{
-		Ep = E - Mat.omega0 * hbar;
+		Ep = E - Mat.omega_0 * hbar;
 	}
 	else
 	{
-		Ep = E + Mat.omega0 * hbar;
+		Ep = E + Mat.omega_0 * hbar;
 	}
 
 	vec3d kp = RandKFromE(Ep, Mat);
