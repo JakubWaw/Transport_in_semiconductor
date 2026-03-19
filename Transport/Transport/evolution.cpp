@@ -4,6 +4,7 @@
 #include "evolution.h"
 #include "class.h"
 #include "distribution.h"
+#include "scattering.h"
 
 //additional functions for inside loop
 enum class ScatteringType { // numbering of scattering types
@@ -16,27 +17,41 @@ struct ScatteringEvent { // structure to store information about scattering even
     double event_time;
 	ScatteringEvent(ScatteringType type, double time_to_event) : type(type), event_time(time_to_event) {}
 };
-double draw_new_time(ScatteringType type) // function to draw new time to scattering event based on type of scattering
+double draw_new_time(ScatteringType type, material Mat) // function to draw new time to scattering event based on type of scattering
 {
     switch(type)
     {
         case ScatteringType::Acoustic:
-            return Poisson(1e-6); //draw_acoustic_time();
+            return Poisson(Mat.tau_ac); //draw_acoustic_time();
 
         case ScatteringType::Optical:
-            return Poisson(1e-6); //draw_optical_time();
+            return Poisson(Mat.tau_op); //draw_optical_time();
 
         case ScatteringType::Impurity:
-            return Poisson(1e-6); //draw_impurity_time();
+            return Poisson(Mat.tau_ion); //draw_impurity_time();
     }
 
     return 0.0;
 }
-bool compare_time(const ScatteringEvent& a, const ScatteringEvent& b) // function to compare scattering events based on time to event, used for sorting
+struct vec3d perform_scattering(ScatteringType type, vec3d k, material Mat) // function to update quasi-momentum k based on type of scattering
 {
-    return a.event_time < b.event_time;
-}
+	vec3d new_k(0, 0, 0);
+	switch(type)
+	{
+		case ScatteringType::Acoustic:
+			new_k = ScatterAcousticPhonon(k, Mat);
+			break;
 
+		case ScatteringType::Optical:
+			new_k = ScatterOpticalPhonon(k, Mat);
+			break;
+
+		case ScatteringType::Impurity:
+			new_k = ScatterIon(k, Mat);
+			break;
+	}
+	return new_k;
+}
 struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat)
 {
 	int N = 1000; //Ilosc czastek w sumulacji
@@ -54,9 +69,9 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 		vec3d k = Boltzmannk(Temp, Mat); // quasi-momentum of particle, randomly drawn from Boltzmann distribution for given temperature and material
 
 		std::vector<ScatteringEvent> events; //vector to store scattering events and their times, will be updated after each scattering event
-		events.push_back(ScatteringEvent(ScatteringType::Acoustic, Poisson(1e-6))); 
-		events.push_back(ScatteringEvent(ScatteringType::Optical, Poisson(1e-6))); //docelowo tutaj losujemy 3 rozne czasy dla 
-		events.push_back(ScatteringEvent(ScatteringType::Impurity, Poisson(1e-6))); //3 rozproszen, ale na razie niech bedzie jedno dla uproszczenia
+		events.push_back(ScatteringEvent(ScatteringType::Acoustic, Poisson(Mat.tau_ac))); 
+		events.push_back(ScatteringEvent(ScatteringType::Optical, Poisson(Mat.tau_op))); //docelowo tutaj losujemy 3 rozne czasy dla 
+		events.push_back(ScatteringEvent(ScatteringType::Impurity, Poisson(Mat.tau_ion))); //3 rozproszen, ale na razie niech bedzie jedno dla uproszczenia
 
 		while (Time < MaxTime)
 		{
@@ -86,22 +101,16 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			// zapamiętaj stare k!
 			vec3d k_old = k;
 
-			// 🔴 UPDATE k (równanie ruchu)
-			vec3d dk = vec3d(0, 0, 0);
-			k.x = k_old.x + (-e / hbar) * Efield.x * dt;
-			k.y = k_old.y + (-e / hbar) * Efield.y * dt;
-			k.z = k_old.z + (-e / hbar) * Efield.z * dt;
-			// 🔵 UPDATE r (prędkość z k)
-			r.x = r.x + (hbar / Mat.mx) * k_old.x * dt + (-e / (2.0 * Mat.mx)) * Efield.x * dt * dt;
-			r.y = r.y + (hbar / Mat.my) * k_old.y * dt + (-e / (2.0 * Mat.my)) * Efield.y * dt * dt;
-			r.z = r.z + (hbar / Mat.mz) * k_old.z * dt + (-e / (2.0 * Mat.mz)) * Efield.z * dt * dt;
+			// UPDATE k
+			k = k_old +  Efield * (-e/hbar)* dt ; 
+			// UPDATE r 
+			r = r + k_old * (hbar / Mat.mx) * dt + Efield * (-e / (2.0 * Mat.mx)) * dt * dt; //klasyczna aktualizacja pozycji, ale z uwzglednieniem przyspieszenia elektrycznego
 			//new time on the clock
 			Time = t_next;
 			// wykonanie rozproszenia
-			// k = k + perform_scattering(event_type); //fuction to write that will update quasi-momentum k based on type of scattering
-			// będzie trzeba przełdować dodawanie w tej funkcji bo k jest wektorem a perform_scattering będzie zwracać wektor, więc trzeba będzie zdefiniować operator + dla wektorów
+			k = perform_scattering(type,k,Mat); //fuction to write that will update quasi-momentum k based on type of scattering
 			// time of next scattering event of the same type
-			double new_time = Time + draw_new_time(type);
+			double new_time = Time + draw_new_time(type, Mat); //function to write that will draw new time to scattering event based on type of scattering
 			// update time to next scattering event of the same type
 			it->event_time = new_time;
 		}
@@ -113,9 +122,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	vec3d SumDrifts(0, 0, 0);
 	for (int i = 0; i < Drifts.size(); i++)
 	{
-		SumDrifts.x += Drifts[i].x;
-		SumDrifts.y += Drifts[i].y;
-		SumDrifts.z += Drifts[i].z;
+		SumDrifts = SumDrifts + Drifts[i];
 	}
 
 	//Obliczenie sredniego dryfu

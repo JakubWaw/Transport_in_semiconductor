@@ -20,10 +20,11 @@ struct material
 	double N_d;
 	double T;
 	double omega_0;
+	double Q_s;
 
-	material(double mx, double my, double mz, double tau_op, double tau_ac, double tau_ion, double N_d, double T, double omega_0)
-		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d), T(T), omega_0(omega_0) {
-	}
+	material(double mx, double my, double mz, double tau_op, double tau_ac, double tau_ion, double N_d, double T, double omega_0, double Q_s)
+		: mx(mx), my(my), mz(mz), tau_op(tau_op), tau_ac(tau_ac), tau_ion(tau_ion), N_d(N_d), T(T), omega_0(omega_0), Q_s(Q_s)  {
+
 };
 
 struct vec2d
@@ -49,5 +50,21 @@ struct vec3d
 	vec3d()
 		: x(0), y(0), z(0) {
 	}
+	//overload addition operator for vec3d
+	vec3d operator+(const vec3d& other) const
+	{
+		return vec3d(x + other.x, y + other.y, z + other.z);
+	}
+	//multiplication by scalar
+	vec3d operator*(double scalar) const
+	{
+		return vec3d(x * scalar, y * scalar, z * scalar);
+	}
+	//scalar product
+	double operator*(const vec3d& other) const
+	{
+		return x * other.x + y * other.y + z * other.z;
+	}
+
 };
 
