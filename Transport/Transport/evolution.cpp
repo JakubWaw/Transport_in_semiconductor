@@ -37,7 +37,7 @@ bool compare_time(const ScatteringEvent& a, const ScatteringEvent& b) // functio
     return a.event_time < b.event_time;
 }
 
-struct vec3d CalcMeanDrift(double Temp, double Efield, struct material Mat)
+struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat)
 {
 	int N = 1000; //Ilosc czastek w sumulacji
 	std::vector <vec3d> Drifts;
@@ -79,8 +79,28 @@ struct vec3d CalcMeanDrift(double Temp, double Efield, struct material Mat)
 			);
 			// type of scattering event
 			ScatteringType type = it->type;
+
+			// time to next scattering event
+			double t_next = it->event_time;
+			double dt = t_next - Time;
+			// 🔴 UPDATE k (równanie ruchu)
+			vec3d dk = vec3d(0, 0, 0);
+			dk.x = (-e / hbar) * Efield.x * dt;
+			dk.y = (-e / hbar) * Efield.y * dt;
+			dk.z = (-e / hbar) * Efield.z * dt;
+			k.x = k.x + dk.x;
+			k.y = k.y + dk.y;
+			k.z = k.z + dk.z;
+			// 🔵 UPDATE r (prędkość z k)
+			vec3d v = vec3d(0, 0, 0); //velocity of particle, calculated from quasi-momentum k using effective mass approximation and parabolic dispersion relation
+			v.x = hbar * k.x / Mat.meff_l;
+			v.y = hbar * k.y / Mat.meff_l;
+			v.z = hbar * k.z / Mat.meff_t;
+			r.x = r.x + v.x * dt;
+			r.y = r.y + v.y * dt;
+			r.z = r.z + v.z * dt;
 			//new time on the clock
-			Time = it->event_time;
+			Time = t_next;
 			// wykonanie rozproszenia
 			// k = k + perform_scattering(event_type); //fuction to write that will update quasi-momentum k based on type of scattering
 			// będzie trzeba przełdować dodawanie w tej funkcji bo k jest wektorem a perform_scattering będzie zwracać wektor, więc trzeba będzie zdefiniować operator + dla wektorów

@@ -6,6 +6,7 @@
 #define m0 9.10938356e-31
 #define hbar 1.054571817e-34
 #define delta_k 10e12
+#define e 1.602176634e-19
 
 struct material
 {
