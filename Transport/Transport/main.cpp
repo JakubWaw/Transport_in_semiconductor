@@ -14,7 +14,7 @@
 int main()
 {
 
-	material Si = material(0.98*m0, 0.98*m0, 0.19*m0, pow(10,-13.5), pow(10,-12.5), pow(10,-10), 1.2*10e16, 200, 1, 1);
+	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, pow(10, -13.5), pow(10, -12.5), pow(10, -10), 1.2 * 10e16, 200, 15.6 * pow(10, 12), 1);
 	double Ek_Si = Ek(vec3d(10e10, 10e10, 10e10), Si);
 
 	std::cout<< Ek_Si;
