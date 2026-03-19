@@ -4,6 +4,7 @@
 #include "evolution.h"
 #include "class.h"
 #include "distribution.h"
+#include "scattering.h"
 
 //additional functions for inside loop
 enum class ScatteringType { // numbering of scattering types
@@ -36,7 +37,25 @@ bool compare_time(const ScatteringEvent& a, const ScatteringEvent& b) // functio
 {
     return a.event_time < b.event_time;
 }
+struct vec3d perform_scattering(ScatteringType type, vec3d k, material Mat) // function to update quasi-momentum k based on type of scattering
+{
+	vec3d new_k(0, 0, 0);
+	switch(type)
+	{
+		case ScatteringType::Acoustic:
+			new_k = ScatterAcousticPhonon(k, Mat);
+			break;
 
+		case ScatteringType::Optical:
+			new_k = ScatterOpticalPhonon(k, Mat);
+			break;
+
+		case ScatteringType::Impurity:
+			new_k = ScatterIon(k, Mat);
+			break;
+	}
+	return new_k;
+}
 struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat)
 {
 	int N = 1000; //Ilosc czastek w sumulacji
@@ -86,20 +105,21 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			// zapamiętaj stare k!
 			vec3d k_old = k;
 
-			// 🔴 UPDATE k (równanie ruchu)
+			// UPDATE k
 			vec3d dk = vec3d(0, 0, 0);
 			k.x = k_old.x + (-e / hbar) * Efield.x * dt;
 			k.y = k_old.y + (-e / hbar) * Efield.y * dt;
 			k.z = k_old.z + (-e / hbar) * Efield.z * dt;
-			// 🔵 UPDATE r (prędkość z k)
+			// UPDATE r 
 			r.x = r.x + (hbar / Mat.mx) * k_old.x * dt + (-e / (2.0 * Mat.mx)) * Efield.x * dt * dt;
 			r.y = r.y + (hbar / Mat.my) * k_old.y * dt + (-e / (2.0 * Mat.my)) * Efield.y * dt * dt;
 			r.z = r.z + (hbar / Mat.mz) * k_old.z * dt + (-e / (2.0 * Mat.mz)) * Efield.z * dt * dt;
 			//new time on the clock
 			Time = t_next;
 			// wykonanie rozproszenia
-			// k = k + perform_scattering(event_type); //fuction to write that will update quasi-momentum k based on type of scattering
-			// będzie trzeba przełdować dodawanie w tej funkcji bo k jest wektorem a perform_scattering będzie zwracać wektor, więc trzeba będzie zdefiniować operator + dla wektorów
+			k.x = k.x + perform_scattering(type,k,Mat).x; //fuction to write that will update quasi-momentum k based on type of scattering
+			k.y = k.y + perform_scattering(type,k,Mat).y;
+			k.z = k.z + perform_scattering(type,k,Mat).z;
 			// time of next scattering event of the same type
 			double new_time = Time + draw_new_time(type);
 			// update time to next scattering event of the same type
