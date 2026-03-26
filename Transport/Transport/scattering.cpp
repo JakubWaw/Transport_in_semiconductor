@@ -26,8 +26,15 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 {
 	double E = Ek(k, Mat);
 
+	double nw = 1.0 / (exp((hbar * Mat.omega_0) / (kB * Mat.T)) - 1.0);//obsadzenie fononow optycznych
+
+	double U = double((rand() % 1000)) / 1000.0;
+
 	//wylosuj czy emisja czy absobcja
 	bool emmit = 0;
+	if (U > (nw + 1.0) / (2.0 * nw + 1))
+		emmit = 1;
+	
 
 	double Ep;
 	if (emmit == 1)
@@ -56,23 +63,17 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	//przejscie do przestrzeni przeskalowanej do sfery
 	vec3d ks = vec3d(k.x / sqrt(Mat.mx), k.y / sqrt(Mat.my), k.z / sqrt(Mat.mz));
 
-	double qs_max = 2 * sqrt(ks * ks);
-
 	//wylosowanie q z rozkladu za pomoca metody odrzutu
 	double a, f_q;
 	vec3d q, qs;
+	vec3d kp, ksp;
 	do
 	{
-		vec2d Angles = UniAngles();
-		double theta = Angles.x;
-		double phi = Angles.y;
-		vec3d q_unitary = vec3d(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
+		ksp = RandKFromE(Ep, Mat);
 
-		double U = double((rand() % 1000)) / 1000.0;
 		double V = double((rand() % 1000)) / 1000.0;
 
-		double q_len = U * qs_max;
-		qs = q_unitary * q_len;
+		qs = ksp + (ks*(-1));
 		q = vec3d(qs.x * sqrt(Mat.mx), qs.y * sqrt(Mat.my), qs.z * sqrt(Mat.mz));
 
 		f_q = 1.0 / (q * q + Mat.Q_s * Mat.Q_s);
@@ -80,11 +81,9 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 
 	} while (a <= f_q);
 
-	vec3d ksp = ks + qs;
-
 	//przeskalowanie na wszelki
-	ksp = ksp * (sqrt(ks*ks) / sqrt(ksp*ksp));
-	vec3d kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
+	//ksp = ksp * (sqrt(ks*ks) / sqrt(ksp*ksp));
+	kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
 
 	//To do debugu
 	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
