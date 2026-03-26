@@ -61,7 +61,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	std::vector <vec3d> Drifts;
 	Drifts.resize(N);
 	
-	double MaxTime = pow(10, -9); 
+	double MaxTime = pow(10, -6); //1us
 
 	for (int i = 0; i < N; i++)
 	{
@@ -116,7 +116,8 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			double new_time = Time + draw_new_time(type, Mat); //function to write that will draw new time to scattering event based on type of scattering
 			// update time to next scattering event of the same type
 			it->event_time = new_time;
-			std::cout << "Time: " << Time << " s, Scattering type: " << static_cast<int>(type) << ", k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
+			std::cout << "New time: " << new_time << std::endl;
+			//std::cout << "Time: " << Time << " s, Scattering type: " << static_cast<int>(type) << ", k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
 		}
 
 		Drifts[i] = r;

@@ -64,7 +64,7 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	double Ep = E;
 
 	//przejscie do przestrzeni przeskalowanej do sfery
-	vec3d ks = vec3d(k.x / sqrt(Mat.mx), k.y / sqrt(Mat.my), k.z / sqrt(Mat.mz));
+	vec3d ks = vec3d(k.x / sqrt(Mat.mx / m0), k.y / sqrt(Mat.my / m0), k.z / sqrt(Mat.mz / m0));
 
 	//wylosowanie q z rozkladu za pomoca metody odrzutu
 	double a, f_q;
@@ -73,11 +73,14 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	do
 	{
 		ksp = RandKFromE(Ep, Mat);
+		//std::cout << "k: " << k.x << " " << k.y << " " << k.y << std::endl;
+		//std::cout << "ks: " << ks.x << " " << ks.y << " " << ks.y << std::endl;
+		//std::cout << "ksp: " << ksp.x << " " << ksp.y << " " << ksp.y << std::endl;
 
 		double V = double((rand() % 1000)) / 1000.0;
 
 		qs = ksp + (ks*(-1));
-		q = vec3d(qs.x * sqrt(Mat.mx), qs.y * sqrt(Mat.my), qs.z * sqrt(Mat.mz));
+		q = vec3d(qs.x * sqrt(Mat.mx / m0), qs.y * sqrt(Mat.my / m0), qs.z * sqrt(Mat.mz / m0));
 
 		f_q = 1.0 / (q * q + Mat.Q_s * Mat.Q_s);
 		a = V * 1.0 / (Mat.Q_s * Mat.Q_s);
@@ -86,7 +89,7 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 
 	//przeskalowanie na wszelki
 	//ksp = ksp * (sqrt(ks*ks) / sqrt(ksp*ksp));
-	kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
+	kp = vec3d(ksp.x * sqrt(Mat.mx / m0), ksp.y * sqrt(Mat.my / m0), ksp.z * sqrt(Mat.mz / m0));
 
 	//To do debugu
 	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;

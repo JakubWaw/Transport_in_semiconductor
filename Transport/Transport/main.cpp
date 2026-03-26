@@ -16,8 +16,9 @@ int main()
 	srand(time(NULL));
 
 	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, pow(10, -13.5), pow(10, -12.5), pow(10, -10), 1.2 * 10e16, 200, 15.6 * pow(10, 12), 0);
-	double Ek_Si = Ek(vec3d(10e10, 10e10, 10e10), Si);
 
+
+	std::cout << Si.tau_ac << " " << Si.tau_op << " " << Si.tau_ion << std::endl;
 	//std::cout<< Ek_Si;
 	//std::cout << Poisson(Si.tau_ac) << std::endl;
 	//std::cout << Boltzmannk(Si).x << " " << Boltzmannk(Si).y << " " << Boltzmannk(Si).z << std::endl;
