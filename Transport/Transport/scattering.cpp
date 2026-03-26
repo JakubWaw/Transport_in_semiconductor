@@ -18,7 +18,7 @@ struct vec3d ScatterAcousticPhonon(vec3d k, material Mat)
 
 
 	//To do debugu
-	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
+	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 	return kp;
 }
 
@@ -49,7 +49,7 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 	vec3d kp = RandKFromE(Ep, Mat);
 
 	//To do debugu
-	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
+	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 
 	return kp;
 }
@@ -86,6 +86,6 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 	kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
 
 	//To do debugu
-	std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
+	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 	return kp;
 }
