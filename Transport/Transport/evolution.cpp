@@ -63,8 +63,15 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	
 	//double MaxTime = pow(10, -9); //1ns
 
+	double Prog_Size = 0.1;
+	int Progress = 0;
+
+	#pragma omp parallel for
 	for (int i = 0; i < N; i++)
 	{
+		Progress++;
+		if( Progress % int(N * Prog_Size) == 0)
+			cout << "Progress " << double(Progress) / N * 100.0 << "%" << endl;
 		//Inicjalizaje wektorow
 		double Time = 0;
 		vec3d r = vec3d(0, 0, 0); //position of particle
