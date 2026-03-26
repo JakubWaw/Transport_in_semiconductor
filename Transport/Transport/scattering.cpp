@@ -39,7 +39,10 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 	double Ep;
 	if (emmit == 1)
 	{
+		
 		Ep = E - Mat.omega_0 * hbar;
+		if (Ep < 0) //jesli za malo energii nie rozpraszaj
+			return k;
 	}
 	else
 	{
