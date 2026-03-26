@@ -20,18 +20,24 @@ int main()
 
 	//std::cout<< Ek_Si;
 
-	std::cout <<1e10<< std::endl;
+	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e5, 0, 0), Si, 10);
 
-	ScatterIon(vec3d(1e10, 0, 0), Si);
-	ScatterIon(vec3d(1e10, 0, 0), Si);
-	ScatterIon(vec3d(1e10, 0, 0), Si);
-	ScatterIon(vec3d(1e10, 0, 0), Si);
 
-	std::cout << std::endl;
-	ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
+	// tempartaura
+	// mat SI.t_op = 
+
+	// std::cout <<1e10<< std::endl;
+
+	// ScatterIon(vec3d(1e10, 0, 0), Si);
+	// ScatterIon(vec3d(1e10, 0, 0), Si);
+	// ScatterIon(vec3d(1e10, 0, 0), Si);
+	// ScatterIon(vec3d(1e10, 0, 0), Si);
+
+	// std::cout << std::endl;
+	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
+	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
+	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
+	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
 
 	return 0;
 

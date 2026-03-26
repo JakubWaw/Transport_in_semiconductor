@@ -52,13 +52,13 @@ struct vec3d perform_scattering(ScatteringType type, vec3d k, material Mat) // f
 	}
 	return new_k;
 }
-struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat)
-{
-	int N = 1000; //Ilosc czastek w sumulacji
+struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat, int N = 1000)
+{	
+	
 	std::vector <vec3d> Drifts;
 	Drifts.resize(N);
 	
-	double MaxTime = 1e-3; //ms
+	double MaxTime = 1e-9; //ms
 
 	for (int i = 0; i < N; i++)
 	{
