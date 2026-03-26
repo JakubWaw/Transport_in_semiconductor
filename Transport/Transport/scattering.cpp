@@ -77,7 +77,7 @@ struct vec3d ScatterIon(vec3d k, material Mat)
 		//std::cout << "ks: " << ks.x << " " << ks.y << " " << ks.y << std::endl;
 		//std::cout << "ksp: " << ksp.x << " " << ksp.y << " " << ksp.y << std::endl;
 
-		double V = double((rand() % 1000)) / 1000.0;
+		double V = double(rand()) / RAND_MAX;
 
 		qs = ksp + (ks*(-1));
 		q = vec3d(qs.x * sqrt(Mat.mx / m0), qs.y * sqrt(Mat.my / m0), qs.z * sqrt(Mat.mz / m0));
