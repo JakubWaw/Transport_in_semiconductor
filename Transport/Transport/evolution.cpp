@@ -1,10 +1,13 @@
 #include <vector>
 #include <algorithm>
+#include <iostream>
 
 #include "evolution.h"
 #include "class.h"
 #include "distribution.h"
 #include "scattering.h"
+
+using namespace std;
 
 //additional functions for inside loop
 enum class ScatteringType { // numbering of scattering types
@@ -52,13 +55,13 @@ struct vec3d perform_scattering(ScatteringType type, vec3d k, material Mat) // f
 	}
 	return new_k;
 }
-struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat, int N = 1000)
+struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat, int N)
 {	
 	
 	std::vector <vec3d> Drifts;
 	Drifts.resize(N);
 	
-	double MaxTime = 1e-9; //ms
+	double MaxTime = pow(10, -9); 
 
 	for (int i = 0; i < N; i++)
 	{
@@ -72,9 +75,9 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 		events.push_back(ScatteringEvent(ScatteringType::Acoustic, Poisson(Mat.tau_ac))); 
 		events.push_back(ScatteringEvent(ScatteringType::Optical, Poisson(Mat.tau_op))); //docelowo tutaj losujemy 3 rozne czasy dla 
 		events.push_back(ScatteringEvent(ScatteringType::Impurity, Poisson(Mat.tau_ion))); //3 rozproszen, ale na razie niech bedzie jedno dla uproszczenia
-
 		while (Time < MaxTime)
 		{
+			std:: cout << "Time: " << Time << " s, k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
 			// ta funkcja trochę zmieniła swoją strukture wzgledem poczaatkowego pomysłu bo usuwanie elementów w wektorze
 			// jest dość problematyczne, więc zamiast tego po prostu aktualizuje czas do nastepnego rozproszenia danego typu,
 			// a potem wybieram to rozproszenie które nastąpi najprędzej
@@ -113,6 +116,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			double new_time = Time + draw_new_time(type, Mat); //function to write that will draw new time to scattering event based on type of scattering
 			// update time to next scattering event of the same type
 			it->event_time = new_time;
+			//std::cout << "Time: " << Time << " s, Scattering type: " << static_cast<int>(type) << ", k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
 		}
 
 		Drifts[i] = r;
