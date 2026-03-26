@@ -77,7 +77,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 		events.push_back(ScatteringEvent(ScatteringType::Impurity, Poisson(Mat.tau_ion))); //3 rozproszen, ale na razie niech bedzie jedno dla uproszczenia
 		while (Time < MaxTime)
 		{
-			std:: cout << "Time: " << Time << " s, k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
+			//std:: cout << "Time: " << Time << " s, k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
 			// ta funkcja trochę zmieniła swoją strukture wzgledem poczaatkowego pomysłu bo usuwanie elementów w wektorze
 			// jest dość problematyczne, więc zamiast tego po prostu aktualizuje czas do nastepnego rozproszenia danego typu,
 			// a potem wybieram to rozproszenie które nastąpi najprędzej
@@ -116,7 +116,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			double new_time = Time + draw_new_time(type, Mat); //function to write that will draw new time to scattering event based on type of scattering
 			// update time to next scattering event of the same type
 			it->event_time = new_time;
-			//std::cout << "Time: " << Time << " s, Scattering type: " << static_cast<int>(type) << ", k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
+			std::cout << "Time: " << Time << " s, Scattering type: " << static_cast<int>(type) << ", k: (" << k.x << ", " << k.y << ", " << k.z << ")" << std::endl;
 		}
 
 		Drifts[i] = r;
