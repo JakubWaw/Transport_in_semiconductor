@@ -15,17 +15,24 @@ int main()
 {
 	srand(time(NULL));
 
-	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, pow(10, -13.5), pow(10, -12.5), pow(10, -10), 1.2 * 10e16, 200, 15.6 * pow(10, 12), 0);
+	
 
+	double Tau_Si_Ac = pow(10, -12.5);
+	double Tau_Si_Op = pow(10, -13.5);
+	double Tau_Si_Ion = pow(10, -10);
+	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, Tau_Si_Op, Tau_Si_Ac, Tau_Si_Ion, 1.2 * 10e16, 200, 15.6 * pow(10, 12), 0);
 
-	std::cout << Si.tau_ac << " " << Si.tau_op << " " << Si.tau_ion << std::endl;
+	//Si.T = 20;
+	//std::cout << 1.0 / (exp((hbar * Si.omega_0) / (kB * Si.T)) - 1.0) << std::endl;
+
+	//std::cout << Si.tau_ac << " " << Si.tau_op << " " << Si.tau_ion << std::endl;
 	//std::cout<< Ek_Si;
 	//std::cout << Poisson(Si.tau_ac) << std::endl;
 	//std::cout << Boltzmannk(Si).x << " " << Boltzmannk(Si).y << " " << Boltzmannk(Si).z << std::endl;
 	double MaxTime = pow(10, -9);
-	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, 100, MaxTime);
+	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(0, 0, 0), Si, 1000, MaxTime); //1e+5
 	//std::cout << "Mean drift for Si at 200K and E = 1e7 V/m: " << Si_200K_Ee5.x << " " << Si_200K_Ee5.y << " " << Si_200K_Ee5.z << std::endl;
-	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5.x / MaxTime << " " << Si_200K_Ee5.y / MaxTime << " " << Si_200K_Ee5.z / MaxTime << std::endl;
+	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5 / MaxTime << std::endl;
 
 	// tempartaura
 	// mat SI.t_op = 

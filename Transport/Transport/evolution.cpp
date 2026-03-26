@@ -71,6 +71,8 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 
 		vec3d k = Boltzmannk(Mat); // quasi-momentum of particle, randomly drawn from Boltzmann distribution for given temperature and material
 
+		//std::cout << "k: " << k << std::endl;
+
 		std::vector<ScatteringEvent> events; //vector to store scattering events and their times, will be updated after each scattering event
 		events.push_back(ScatteringEvent(ScatteringType::Acoustic, Poisson(Mat.tau_ac))); 
 		events.push_back(ScatteringEvent(ScatteringType::Optical, Poisson(Mat.tau_op))); //docelowo tutaj losujemy 3 rozne czasy dla 
@@ -107,7 +109,12 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 			// UPDATE k
 			k = k_old +  Efield * (-e/hbar)* dt ; 
 			// UPDATE r 
-			r = r + k_old * (hbar / Mat.mx) * dt + Efield * (-e / (2.0 * Mat.mx)) * dt * dt; //klasyczna aktualizacja pozycji, ale z uwzglednieniem przyspieszenia elektrycznego
+			double rx_push = k_old.x * (hbar / Mat.mx) * dt + Efield.x * (-e / (2.0 * Mat.mx)) * dt * dt;
+			double ry_push = k_old.y * (hbar / Mat.my) * dt + Efield.y * (-e / (2.0 * Mat.my)) * dt * dt;
+			double rz_push = k_old.z * (hbar / Mat.mz) * dt + Efield.z * (-e / (2.0 * Mat.mz)) * dt * dt;
+			r = r + vec3d(rx_push, ry_push, rz_push); //klasyczna aktualizacja pozycji, ale z uwzglednieniem przyspieszenia elektrycznego
+			//cout << k_old * (hbar / Mat.mx) * dt << endl;
+			//cout << Efield * (-e / (2.0 * Mat.mx)) * dt * dt << endl;
 			//new time on the clock
 			Time = t_next;
 			// wykonanie rozproszenia
@@ -127,6 +134,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	vec3d SumDrifts(0, 0, 0);
 	for (int i = 0; i < Drifts.size(); i++)
 	{
+		//cout << Drifts[i] << endl;
 		SumDrifts = SumDrifts + Drifts[i];
 	}
 

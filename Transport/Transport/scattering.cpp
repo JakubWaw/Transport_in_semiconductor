@@ -27,12 +27,12 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 	double E = Ek(k, Mat);
 
 	double nw = 1.0 / (exp((hbar * Mat.omega_0) / (kB * Mat.T)) - 1.0);//obsadzenie fononow optycznych
-
+	
 	double U = double((rand() % 1000)) / 1000.0;
 
 	//wylosuj czy emisja czy absobcja
 	bool emmit = 0;
-	if (U > (nw + 1.0) / (2.0 * nw + 1))
+	if (U > (nw) / (2.0 * nw + 1.0))
 		emmit = 1;
 	
 

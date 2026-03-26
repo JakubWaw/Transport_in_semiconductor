@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 //Uzywajmy w kodzie jednostek SI, bez jakis eV czy innych udziwnien bo potem sie wszystko pierdoli
 #define PI 3.14159265359
 #define kB 1.380649e-23
@@ -60,11 +62,21 @@ struct vec3d
 	{
 		return vec3d(x * scalar, y * scalar, z * scalar);
 	}
+	//multiplication by scalar
+	vec3d operator/(double scalar) const
+	{
+		return vec3d(x / scalar, y / scalar, z / scalar);
+	}
 	//scalar product
 	double operator*(const vec3d& other) const
 	{
 		return x * other.x + y * other.y + z * other.z;
 	}
 
+	friend std::ostream& operator<<(std::ostream& os, const vec3d& v)
+	{
+		os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+		return os;
+	}
 };
 
