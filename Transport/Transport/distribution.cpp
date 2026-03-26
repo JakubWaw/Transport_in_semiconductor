@@ -8,7 +8,7 @@
 double Poisson(double tau)
 {
 	//This function returns time of next event with constant probability gamma = 1/tau
-	double U = double((rand() % 1000))/1000.0;
+	double U = double((rand() % 1000 + 1))/1000.0;
 	return -log(U) * tau;
 }
 
@@ -25,7 +25,7 @@ struct vec2d UniAngles()
 double BoltzmannE(double T)
 {
 	//Funkcja ta nie uwzglednia zmiennej DOS w funkcji E
-	double U = double((rand() % 1000)) / 1000.0;
+	double U = double((rand() % 1000 + 1)) / 1000.0;
 	double E = -kB * T * log(U);
 	return E;
 }
