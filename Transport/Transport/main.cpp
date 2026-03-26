@@ -20,7 +20,7 @@ int main()
 	double Tau_Si_Ac = pow(10, -12.5);
 	double Tau_Si_Op = pow(10, -13.5);
 	double Tau_Si_Ion = pow(10, -10);
-	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, Tau_Si_Op, Tau_Si_Ac, Tau_Si_Ion, 1.2 * 10e16, 200, 15.6 * pow(10, 12), 0);
+	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, Tau_Si_Op, Tau_Si_Ac, Tau_Si_Ion, 1.2 * 10e16, 200, 15.6 * pow(10, 12) * 2.0 * PI, 0); //dla normalnego Q_s cos wolno sie liczy
 
 	//Si.T = 20;
 	//std::cout << 1.0 / (exp((hbar * Si.omega_0) / (kB * Si.T)) - 1.0) << std::endl;
