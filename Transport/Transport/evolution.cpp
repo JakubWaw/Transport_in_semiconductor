@@ -69,7 +69,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 		double Time = 0;
 		vec3d r = vec3d(0, 0, 0); //position of particle
 
-		vec3d k = Boltzmannk(Temp, Mat); // quasi-momentum of particle, randomly drawn from Boltzmann distribution for given temperature and material
+		vec3d k = Boltzmannk(Mat); // quasi-momentum of particle, randomly drawn from Boltzmann distribution for given temperature and material
 
 		std::vector<ScatteringEvent> events; //vector to store scattering events and their times, will be updated after each scattering event
 		events.push_back(ScatteringEvent(ScatteringType::Acoustic, Poisson(Mat.tau_ac))); 

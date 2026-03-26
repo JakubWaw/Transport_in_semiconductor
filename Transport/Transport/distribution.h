@@ -10,6 +10,6 @@ double BoltzmannE(double T);
 
 struct vec3d RandKFromE(double E, material Mat);
 
-struct vec3d Boltzmannk(double T, material Mat);
+struct vec3d Boltzmannk(material Mat);
 
 

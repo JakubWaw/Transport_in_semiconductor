@@ -57,3 +57,29 @@ struct vec3d Boltzmannk(double T, material Mat)
 
 	return k;
 }
+
+double uniform01()
+{
+    return (rand() + 1.0) / (RAND_MAX + 2.0); // unika 0 i 1
+}
+
+double normal01()
+{
+    // Box-Muller
+    double u1 = uniform01();
+    double u2 = uniform01();
+    return sqrt(-2.0 * log(u1)) * cos(2.0 * PI * u2);
+}
+
+vec3d Boltzmannk(material Mat)
+{
+    double zx = normal01();
+    double zy = normal01();
+    double zz = normal01();
+
+    double sx = sqrt(Mat.mx * kB * Mat.T) / hbar;
+    double sy = sqrt(Mat.my * kB * Mat.T) / hbar;
+    double sz = sqrt(Mat.mz * kB * Mat.T) / hbar;
+
+    return vec3d(sx * zx, sy * zy, sz * zz);
+}

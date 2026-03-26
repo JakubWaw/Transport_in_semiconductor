@@ -20,6 +20,7 @@ int main()
 
 	//std::cout<< Ek_Si;
 	//std::cout << Poisson(Si.tau_ac) << std::endl;
+	//std::cout << Boltzmannk(Si).x << " " << Boltzmannk(Si).y << " " << Boltzmannk(Si).z << std::endl;
 	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(0, 0, 0), Si, 10);
 	std::cout << "Mean drift for Si at 200K and E = 1e5 V/m: " << Si_200K_Ee5.x << " " << Si_200K_Ee5.y << " " << Si_200K_Ee5.z << std::endl;
 
