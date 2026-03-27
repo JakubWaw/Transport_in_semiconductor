@@ -67,12 +67,13 @@ struct vec3d ScatterIon(vec3d k, material Mat, std::mt19937& gen)
 	double a, f_q;
 	vec3d q;
 	vec3d kp;
+	const double inv_Qs2 = 1.0 / (Mat.Q_s * Mat.Q_s);
 	do
 	{
 		kp = RandKFromE(Ep, Mat, gen);
 
 		double V = dist(gen); // w [0,1]
-		a = V * 1.0 / (Mat.Q_s * Mat.Q_s); //0-fqmax
+		a = V * inv_Qs2; //0-fqmax
 
 		q = kp + (k*(-1));
 

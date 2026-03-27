@@ -68,6 +68,7 @@ struct vec3d CalcMeanDrift(double Temp, struct vec3d Efield, struct material Mat
 	double Prog_Size = 0.1;
 	int Progress = 0;
 
+	//omp_set_num_threads(6);
 	#pragma omp parallel
 	{
 		//tutaj jest zaladowanie kazdego watku przed petla

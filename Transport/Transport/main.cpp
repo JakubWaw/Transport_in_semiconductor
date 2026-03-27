@@ -32,8 +32,8 @@ int main()
 	//std::cout << Poisson(Si.tau_ac) << std::endl;
 	//std::cout << Boltzmannk(Si).x << " " << Boltzmannk(Si).y << " " << Boltzmannk(Si).z << std::endl;
 	double MaxTime = pow(10, -9);
-	double N = 100;
-	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(0, 0, 0), Si, N, MaxTime); //1e+5
+	double N = 1000;
+	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime); //1e+5
 	//std::cout << "Mean drift for Si at 200K and E = 1e7 V/m: " << Si_200K_Ee5.x << " " << Si_200K_Ee5.y << " " << Si_200K_Ee5.z << std::endl;
 	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5 / MaxTime << std::endl;
 
