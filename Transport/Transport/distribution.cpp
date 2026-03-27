@@ -1,30 +1,37 @@
 #include <cstdlib>
 #include <math.h>
+#include <random>
 
 #include "distribution.h"
 #include "class.h"
 
 
-double Poisson(double tau)
+double Poisson(double tau, std::mt19937& gen)
 {
 	//This function returns time of next event with constant probability gamma = 1/tau
-	double U = double((rand() % 1000 + 1))/1000.0;
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+	double U; 
+	do {
+		U = dist(gen);
+	} while (U < 0.001); //jak za male to czas sie robi w chuj duzy
+
 	return -log(U) * tau;
 }
 
-struct vec2d UniAngles()
+struct vec2d UniAngles(std::mt19937& gen)
 {
-	double U = double(rand()) / RAND_MAX; // w [0,1]
-	double V = double(rand()) / RAND_MAX; // w [0,1]
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+	double U = dist(gen); // w [0,1]
+	double V = dist(gen); // w [0,1]
 
 	double psi = acos(1 - 2 * U);
 	double phi = 2 * PI * V;
 	return vec2d(psi, phi);
 }
 
-struct vec3d RandKFromE(double E, material Mat)
+struct vec3d RandKFromE(double E, material Mat, std::mt19937& gen)
 {
-	vec2d Angles = UniAngles();
+	vec2d Angles = UniAngles(gen);
 	double psi = Angles.x;
 	double phi = Angles.y;
 
@@ -36,24 +43,26 @@ struct vec3d RandKFromE(double E, material Mat)
 	return k;
 }
 
-double uniform01()
+double uniform01(std::mt19937& gen)
 {
-    return (rand() + 1.0) / (RAND_MAX + 2.0); // unika 0 i 1
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+	double U = dist(gen);
+    return U; // unika 0 i 1
 }
 
-double normal01()
+double normal01(std::mt19937& gen)
 {
     // Box-Muller
-    double u1 = uniform01();
-    double u2 = uniform01();
+    double u1 = uniform01(gen);
+    double u2 = uniform01(gen);
     return sqrt(-2.0 * log(u1)) * cos(2.0 * PI * u2);
 }
 
-vec3d Boltzmannk(material Mat)
+vec3d Boltzmannk(material Mat, std::mt19937& gen)
 {
-    double zx = normal01();
-    double zy = normal01();
-    double zz = normal01();
+    double zx = normal01(gen);
+    double zy = normal01(gen);
+    double zz = normal01(gen);
 
     double sx = sqrt(Mat.mx * kB * Mat.T) / hbar;
     double sy = sqrt(Mat.my * kB * Mat.T) / hbar;
