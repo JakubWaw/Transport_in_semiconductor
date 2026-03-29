@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <math.h>
 #include <iostream>
+#include <random>
 
 #include "scattering.h"
 #include "class.h"
@@ -8,31 +9,29 @@
 #include "distribution.h"
 
 
-struct vec3d ScatterAcousticPhonon(vec3d k, material Mat)
+struct vec3d ScatterAcousticPhonon(vec3d k, material Mat, std::mt19937& gen)
 {
 	double E = Ek(k, Mat);
 
 	double Ep = E;
 
-	vec3d kp = RandKFromE(Ep, Mat);
+	vec3d kp = RandKFromE(Ep, Mat, gen);
 
-
-	//To do debugu
-	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
 	return kp;
 }
 
-struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
+struct vec3d ScatterOpticalPhonon(vec3d k, material Mat, std::mt19937& gen)
 {
 	double E = Ek(k, Mat);
 
 	double nw = 1.0 / (exp((hbar * Mat.omega_0) / (kB * Mat.T)) - 1.0);//obsadzenie fononow optycznych
-
-	double U = double((rand() % 1000)) / 1000.0;
+	
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
+	double U = dist(gen); // w [0,1]
 
 	//wylosuj czy emisja czy absobcja
 	bool emmit = 0;
-	if (U > (nw + 1.0) / (2.0 * nw + 1))
+	if (U > (nw) / (2.0 * nw + 1.0))
 		emmit = 1;
 	
 
@@ -49,7 +48,7 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 		Ep = E + Mat.omega_0 * hbar;
 	}
 
-	vec3d kp = RandKFromE(Ep, Mat);
+	vec3d kp = RandKFromE(Ep, Mat, gen);
 
 	//To do debugu
 	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
@@ -57,36 +56,31 @@ struct vec3d ScatterOpticalPhonon(vec3d k, material Mat)
 	return kp;
 }
 
-struct vec3d ScatterIon(vec3d k, material Mat)
+struct vec3d ScatterIon(vec3d k, material Mat, std::mt19937& gen)
 {
 	double E = Ek(k, Mat);
 
 	double Ep = E;
 
-	//przejscie do przestrzeni przeskalowanej do sfery
-	vec3d ks = vec3d(k.x / sqrt(Mat.mx), k.y / sqrt(Mat.my), k.z / sqrt(Mat.mz));
-
 	//wylosowanie q z rozkladu za pomoca metody odrzutu
+	std::uniform_real_distribution<double> dist(0.0, 1.0);
 	double a, f_q;
-	vec3d q, qs;
-	vec3d kp, ksp;
+	vec3d q;
+	vec3d kp;
+	const double inv_Qs2 = 1.0 / (Mat.Q_s * Mat.Q_s);
 	do
 	{
-		ksp = RandKFromE(Ep, Mat);
+		kp = RandKFromE(Ep, Mat, gen);
 
-		double V = double((rand() % 1000)) / 1000.0;
+		double V = dist(gen); // w [0,1]
+		a = V * inv_Qs2; //0-fqmax
 
-		qs = ksp + (ks*(-1));
-		q = vec3d(qs.x * sqrt(Mat.mx), qs.y * sqrt(Mat.my), qs.z * sqrt(Mat.mz));
+		q = kp + (k*(-1));
 
 		f_q = 1.0 / (q * q + Mat.Q_s * Mat.Q_s);
-		a = V * 1.0 / (Mat.Q_s * Mat.Q_s);
+		
 
-	} while (a <= f_q);
-
-	//przeskalowanie na wszelki
-	//ksp = ksp * (sqrt(ks*ks) / sqrt(ksp*ksp));
-	kp = vec3d(ksp.x * sqrt(Mat.mx), ksp.y * sqrt(Mat.my), ksp.z * sqrt(Mat.mz));
+	} while (a > f_q);
 
 	//To do debugu
 	//std::cout << "q: " << kp.x - k.x << " " << kp.y - k.y << " " << kp.y - k.y << std::endl;
