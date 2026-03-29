@@ -22,36 +22,35 @@ int main()
 	double Nd_Si = 1.2 * 10e16;
 	material Si = material(0.98 * m0, 0.98 * m0, 0.19 * m0, Tau_Si_Op, Tau_Si_Ac, Tau_Si_Ion, Nd_Si, Temp0_Si, Omega0_Si, Q_s_Si); //dla normalnego Q_s cos wolno sie liczy
 
-	//std::cout << ScatterIon(vec3d(1e2, 0, 0), Si) << std::endl;
-
 	//Si.T = 20;
 	//std::cout << 1.0 / (exp((hbar * Si.omega_0) / (kB * Si.T)) - 1.0) << std::endl;
 
-	//std::cout << Si.tau_ac << " " << Si.tau_op << " " << Si.tau_ion << std::endl;
-	//std::cout<< Ek_Si;
-	//std::cout << Poisson(Si.tau_ac) << std::endl;
-	//std::cout << Boltzmannk(Si).x << " " << Boltzmannk(Si).y << " " << Boltzmannk(Si).z << std::endl;
+
 	double MaxTime = pow(10, -9);
 	double N = 1000;
 	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime); //1e+5
-	//std::cout << "Mean drift for Si at 200K and E = 1e7 V/m: " << Si_200K_Ee5.x << " " << Si_200K_Ee5.y << " " << Si_200K_Ee5.z << std::endl;
 	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5 / MaxTime << std::endl;
 
-	// tempartaura
-	// mat SI.t_op = 
+	// convergence test for number of particles
+	std::vector<double> N_values = {100, 500, 1000, 5000, 10000, 50000, 100000};
+	std::vector<vec3d> drifts;
+	for (int N : N_values)
+	{
+		vec3d drift = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime);
+		drifts.push_back(drift);
+	}
+	save_to_file(drifts, N_values, "drift_convergence_particles.csv");
 
-	// std::cout <<1e10<< std::endl;
+	// convergence test for MaxTime
+	std::vector<double> MaxTime_values = {pow(10, -10),pow(10, -9.5), pow(10, -9), pow(10, -8.5), pow(10, -8), pow(10, -7.5)};
+	std::vector<vec3d> drifts_time;
+	for (double MaxTime : MaxTime_values)
+	{
+		vec3d drift = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime);
+		drifts_time.push_back(drift);
+	}
+	save_to_file(drifts_time, MaxTime_values, "drift_convergence_time.csv");
 
-	// ScatterIon(vec3d(1e10, 0, 0), Si);
-	// ScatterIon(vec3d(1e10, 0, 0), Si);
-	// ScatterIon(vec3d(1e10, 0, 0), Si);
-	// ScatterIon(vec3d(1e10, 0, 0), Si);
-
-	// std::cout << std::endl;
-	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
-	// ScatterAcousticPhonon(vec3d(1e10, 0, 0), Si);
 
 	return 0;
 
