@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
+#include <cmath>
 
 //Uzywajmy w kodzie jednostek SI, bez jakis eV czy innych udziwnien bo potem sie wszystko pierdoli
 #define PI 3.14159265359
@@ -10,6 +12,7 @@
 #define delta_k 10e12
 #define e 1.602176634e-19
 
+using namespace std;
 
 struct material
 {
@@ -78,5 +81,24 @@ struct vec3d
 		os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
 		return os;
 	}
+};
+
+
+struct TrajectoryPoint
+{
+    double time;
+    vec3d r;   // pozycja
+    vec3d k;   // quasi-momentum
+
+    TrajectoryPoint(double t, const vec3d& pos, const vec3d& mom)
+        : time(t), r(pos), k(mom) {}
+};
+
+struct ParticleTrajectory
+{
+    int particle_id;
+    std::vector<TrajectoryPoint> points;
+
+    ParticleTrajectory(int id = -1) : particle_id(id) {}
 };
 

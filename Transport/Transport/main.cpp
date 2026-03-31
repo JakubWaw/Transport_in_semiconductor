@@ -26,30 +26,44 @@ int main()
 	//std::cout << 1.0 / (exp((hbar * Si.omega_0) / (kB * Si.T)) - 1.0) << std::endl;
 
 
-	double MaxTime = pow(10, -9);
-	double N = 1000;
+	double MaxTime = pow(10, -8);
+	double N = 3;
 	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime); //1e+5
 	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5 / MaxTime << std::endl;
 
-	// convergence test for number of particles
-	std::vector<double> N_values = {100, 500, 1000, 5000, 10000, 50000, 100000};
-	std::vector<vec3d> drifts;
-	for (int N : N_values)
-	{
-		vec3d drift = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime);
-		drifts.push_back(drift);
-	}
-	save_to_file(drifts, N_values, "drift_convergence_particles.csv");
+	// trajectories to store for visualization
+	int trajectories_to_store = 3;
 
-	// convergence test for MaxTime
-	std::vector<double> MaxTime_values = {pow(10, -10),pow(10, -9.5), pow(10, -9), pow(10, -8.5), pow(10, -8), pow(10, -7.5)};
-	std::vector<vec3d> drifts_time;
-	for (double MaxTime : MaxTime_values)
-	{
-		vec3d drift = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime);
-		drifts_time.push_back(drift);
-	}
-	save_to_file(drifts_time, MaxTime_values, "drift_convergence_time.csv");
+	std::vector<ParticleTrajectory> trajectories;
+	CalcMeanDrift(200, vec3d(0, 0, 0), Si, N, MaxTime, &trajectories, trajectories_to_store);
+
+	std::vector<ParticleTrajectory> trajectories2;
+	CalcMeanDrift(200, vec3d(1e+5, 0, 0), Si, N, MaxTime, &trajectories2, trajectories_to_store);
+
+	SaveTrajectoriesToSeparateFiles(trajectories,  "C:\\Users\\kwaw1\\Desktop\\studia\\semestr8\\traj_");
+	SaveTrajectoriesToSeparateFiles(trajectories2, "C:\\Users\\kwaw1\\Desktop\\studia\\semestr8\\traj2_");
+
+	// convergence test for number of particles
+	// std::vector<double> N_values = {100, 500, 1000, 5000, 10000, 50000, 100000};
+	// std::vector<vec3d> drifts;
+	// for (double N : N_values)
+	// {
+	// 	std::cout << "Calculating drift for N = " << N << " particles..." << std::endl;
+	// 	vec3d drift = CalcMeanDrift(200, vec3d(1e+5, 0, 0), Si, N, MaxTime);
+	// 	drifts.push_back(drift);
+	// }
+	// save_to_file(drifts, N_values, "drift_convergence_particles.csv");
+
+	// // convergence test for MaxTime
+	// std::vector<double> MaxTime_values = {pow(10, -10),pow(10, -9.5), pow(10, -9), pow(10, -8.5), pow(10, -8), pow(10, -7.5), pow(10, -7)};
+	// std::vector<vec3d> drifts_time;
+	// for (double MaxTime : MaxTime_values)
+	// {
+	// 	std::cout << "Calculating drift for MaxTime = " << MaxTime << " s..." << std::endl;
+	// 	vec3d drift = CalcMeanDrift(200, vec3d(0, 0, 0), Si, N, MaxTime);
+	// 	drifts_time.push_back(drift);
+	// }
+	// save_to_file(drifts_time, MaxTime_values, "drift_convergence_time.csv");
 
 
 	return 0;
