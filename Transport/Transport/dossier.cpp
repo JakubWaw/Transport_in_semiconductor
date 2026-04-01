@@ -46,7 +46,7 @@ void SaveTrajectoriesToSeparateFiles(const std::vector<ParticleTrajectory>& traj
         }
 
         out << std::scientific << std::setprecision(10);
-        out << "point_id,time,r_x,r_y,r_z,k_x,k_y,k_z\n";
+        out << "point_id,time,r_x,r_y,r_z,k_x,k_y,k_z,k2,Ek\n";
 
         for (std::size_t j = 0; j < traj.points.size(); ++j)
         {
