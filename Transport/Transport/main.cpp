@@ -26,22 +26,22 @@ int main()
 	//std::cout << 1.0 / (exp((hbar * Si.omega_0) / (kB * Si.T)) - 1.0) << std::endl;
 
 
-	double MaxTime = pow(10, -8);
+	double MaxTime = pow(10, -9);
 	double N = 3;
-	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+2, 0, 0), Si, N, MaxTime); //1e+5
+	vec3d Si_200K_Ee5 = CalcMeanDrift(200, vec3d(1e+1, 0, 0), Si, N, MaxTime); //1e+5
 	std::cout << "Mean drift for Si at 200K and E = 1e2 V/m: " << Si_200K_Ee5 / MaxTime << std::endl;
 
 	// trajectories to store for visualization
 	int trajectories_to_store = 3;
 
 	std::vector<ParticleTrajectory> trajectories;
-	CalcMeanDrift(200, vec3d(0, 0, 0), Si, N, MaxTime, &trajectories, trajectories_to_store);
+	CalcMeanDrift(200, vec3d(1e+5, 0, 0), Si, N, MaxTime, &trajectories, trajectories_to_store);
 
-	std::vector<ParticleTrajectory> trajectories2;
-	CalcMeanDrift(200, vec3d(1e+5, 0, 0), Si, N, MaxTime, &trajectories2, trajectories_to_store);
+	//std::vector<ParticleTrajectory> trajectories2;
+	//CalcMeanDrift(200, vec3d(1e+5, 0, 0), Si, N, MaxTime, &trajectories2, trajectories_to_store);
 
-	SaveTrajectoriesToSeparateFiles(trajectories,  "C:\\Users\\kwaw1\\Desktop\\studia\\semestr8\\traj_");
-	SaveTrajectoriesToSeparateFiles(trajectories2, "C:\\Users\\kwaw1\\Desktop\\studia\\semestr8\\traj2_");
+	SaveTrajectoriesToSeparateFiles(trajectories,  "traj", Si);
+	//SaveTrajectoriesToSeparateFiles(trajectories2, "C:\\Users\\kwaw1\\Desktop\\studia\\semestr8\\traj2_", Si);
 
 	// convergence test for number of particles
 	// std::vector<double> N_values = {100, 500, 1000, 5000, 10000, 50000, 100000};

@@ -6,4 +6,4 @@
 
 void save_to_file(std::vector<vec3d> drifts, std::vector<double> N_values, std::string filename);
 void SaveTrajectoriesToSeparateFiles(const std::vector<ParticleTrajectory>& trajectories,
-                                     const std::string& prefix);
+                                     const std::string& prefix, material Mat);

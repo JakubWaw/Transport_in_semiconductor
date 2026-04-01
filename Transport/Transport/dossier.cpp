@@ -5,6 +5,7 @@
 #include <string>
 #include <iomanip>
 #include "class.h"
+#include "bandstruct.h"
 
 
 void save_to_file(std::vector<vec3d> drifts, std::vector<double> N_values, std::string filename)
@@ -25,7 +26,7 @@ void save_to_file(std::vector<vec3d> drifts, std::vector<double> N_values, std::
     }
 }
 void SaveTrajectoriesToSeparateFiles(const std::vector<ParticleTrajectory>& trajectories,
-                                     const std::string& prefix)
+                                     const std::string& prefix, material Mat)
 {
     std::cout << "Saving trajectories, count = " << trajectories.size() << std::endl;
 
@@ -59,7 +60,8 @@ void SaveTrajectoriesToSeparateFiles(const std::vector<ParticleTrajectory>& traj
                 << p.k.x << ","
                 << p.k.y << ","
                 << p.k.z << ","
-                << p.k.x*p.k.x + p.k.y*p.k.y + p.k.z*p.k.z << "\n";
+                << p.k.x*p.k.x + p.k.y*p.k.y + p.k.z*p.k.z << ","
+                << Ek(p.k, Mat)<< "\n";
         }
 
         out.close();
